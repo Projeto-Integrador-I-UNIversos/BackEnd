@@ -1,7 +1,7 @@
 from Controller.usuario_controller import UsuarioController
 from Controller.obra_controller import ObraController
 
-# Exemplo de uso
+
 if __name__ == "__main__":
     # Criar um usuário
     usuario_controller = UsuarioController()
