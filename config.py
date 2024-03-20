@@ -1,0 +1,1 @@
+# Coloque as configurações do Flask e do banco de dados aqui

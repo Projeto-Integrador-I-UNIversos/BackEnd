@@ -1,0 +1,31 @@
+import mysql.connector
+
+# Conectar ao banco de dados MySQL
+conn = mysql.connector.connect(
+    host= "127.0.0.1",
+    user="root",
+    password="root",
+    database="universos_literarios"
+)
+
+# Criar um cursor
+cursor = conn.cursor()
+
+# Definir o comando SQL para criar uma tabela
+create_table_query = """
+CREATE TABLE IF NOT EXISTS tb_Usuario(
+    idUsuario INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(45) NOT NULL UNIQUE, 
+    senha VARCHAR(45) NOT NULL,
+    tipo VARCHAR(45) NOT NULL
+);
+"""
+
+# Executar o comando SQL
+cursor.execute(create_table_query)
+
+# Commit para salvar as alterações
+conn.commit()
+
+# Fechar a conexão
+conn.close()
