@@ -20,6 +20,13 @@ CREATE TABLE IF NOT EXISTS tb_Usuario(
     tipo VARCHAR(45) NOT NULL
 );
 """
+create_table_query = """
+CREATE TABLE IF NOT EXISTS tb_Admin(
+    idAdmin INT AUTO_INCREMENT PRIMARY KEY,
+    idUsuario INT,
+    FOREIGN KEY (idUsuario) REFERENCES tb_Usuario(idUsuario)
+);
+"""
 
 # Executar o comando SQL
 cursor.execute(create_table_query)
