@@ -24,12 +24,12 @@ def find_user_by_id(user_id):
 @app.route("/Login", methods=['GET'])
 def login():
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT email FROM usuarios")
+    cursor.execute("SELECT email FROM tb_usuario")
     usernames = [user["email"] for user in cursor.fetchall()]
     cursor.close()
     return jsonify({"usuarios": usernames})
 
-@app.route('/Cadastro', methods=['POST'])
+@app.route("/Cadastro", methods=['POST'])
 def cadastro():
     data = request.json
     email = data['email']
@@ -38,7 +38,7 @@ def cadastro():
 
     cursor = conn.cursor()
     # Inserir o usuário no banco
-    cursor.execute("INSERT INTO usuarios (email, senha, tipo) VALUES (%s, %s, %s)", (email, senha, tipo))
+    cursor.execute("INSERT INTO tb_usuario (email, senha, tipo) VALUES (%s, %s, %s)", (email, senha, tipo))
     conn.commit()
     cursor.close()
     return jsonify({"status": "success", "message": "Usuário cadastrado com sucesso!"})
