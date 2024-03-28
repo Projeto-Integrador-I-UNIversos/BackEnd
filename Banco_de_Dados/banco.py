@@ -28,11 +28,10 @@ CREATE TABLE IF NOT EXISTS tb_Admin(
 );
 """
 
-# Executar o comando SQL
-cursor.execute(create_table_query)
+connection = mysql.connector.connect(
+  host="localhost",
+  user="usuariobancodados",
+  password="senhausuario",
+  database="bancodados"
+)
 
-# Commit para salvar as alterações
-conn.commit()
-
-# Fechar a conexão
-conn.close()
