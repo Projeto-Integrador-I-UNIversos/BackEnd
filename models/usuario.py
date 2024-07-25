@@ -13,8 +13,8 @@ class UsuarioModel:
 
     @staticmethod
     def buscar_usuario_por_email(email):
-        cursor = mysql.connection.cursor(dictionary=True)
-        cursor.execute('SELECT * FROM usuarios WHERE email = %s', (email,))
-        usuario = cursor.fetchone()
-        cursor.close()
+        # Use o contexto with para garantir que o cursor seja fechado adequadamente
+        with mysql.connection.cursor(dictionary=True) as cursor:
+            cursor.execute('SELECT * FROM usuarios WHERE email = "%s"', (email,))
+            usuario = cursor.fetchone()
         return usuario
