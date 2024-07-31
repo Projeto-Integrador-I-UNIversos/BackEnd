@@ -11,7 +11,8 @@ class UsuarioController:
         tipo = data['tipo']
         usuario_id = UsuarioModel.criar_usuario(email, senha, tipo)
 
-        """"if tipo == 'editora':
+        # Criação de editora ou escritor com base no tipo de usuário
+        if tipo == 'editora':
             EditoraModel.criar_editora(
                 usuario_id,
                 data.get('nome_fantasia'),
@@ -36,7 +37,7 @@ class UsuarioController:
                 data.get('sexo'),
                 data.get('twitter'),
                 data.get('nacionalidade')
-            )"""
+            )
         
         return usuario_id
 
