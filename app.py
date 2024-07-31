@@ -6,7 +6,7 @@ from views.livro_view import livro_bp
 
 app = Flask(__name__)
 
-# Inicializa o CORS permitindo todas as origens (ou especifique apenas o necessário)
+# Inicializa o CORS permitindo todas as origens
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # Inicializa a conexão MySQL
