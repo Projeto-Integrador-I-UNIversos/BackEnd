@@ -24,4 +24,3 @@ class UsuarioModel:
             )
             usuario = cursor.fetchone()
         return usuario
-
