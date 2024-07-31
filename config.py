@@ -3,8 +3,8 @@ import mysql.connector
 # Conectar ao banco de dados MySQL
 conn = mysql.connector.connect(
     host= "127.0.0.1",
-    user="root",
-    password="root",
+    user="lara",
+    password="LaraVictoria123_@;",
     database="universos_literarios"
 )
 
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS tb_Admin(
 
 connection = mysql.connector.connect(
     host= "127.0.0.1",
-    user="root",
-    password="root",
+    user="lara",
+    password="LaraVictoria123_@;",
     database="universos_literarios"
 )
