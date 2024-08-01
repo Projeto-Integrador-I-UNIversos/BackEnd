@@ -11,12 +11,11 @@ class UsuarioModel:
                 (email, senha, tipo)
             )
             mysql.connection.commit()
-            usuario_id = cursor.lastrowid
-        return usuario_id
+            idUsuario = cursor.lastrowid
+        return idUsuario
 
     @staticmethod
     def buscar_usuario_por_email(email):
-        # Use o contexto with para garantir que o cursor seja fechado adequadamente
         with mysql.connection.cursor(dictionary=True) as cursor:
             cursor.execute(
                 'SELECT * FROM tb_usuario WHERE email = %s',
@@ -25,3 +24,13 @@ class UsuarioModel:
             usuario = cursor.fetchone()
         return usuario
 
+    @staticmethod
+    def buscar_usuario_por_id(idUsuario):
+        with mysql.connection.cursor(dictionary=True) as cursor:
+            cursor.execute(
+                'SELECT * FROM tb_usuario WHERE id = %s',
+                (idUsuario,)
+            )
+            usuario = cursor.fetchone()
+        return usuario
+    

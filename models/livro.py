@@ -3,10 +3,10 @@ from . import mysql
 
 class LivroModel:
     @staticmethod
-    def adicionar_livro(titulo, idioma, quantidade_paginas, pais, sinopse, status, genero, escritor_id):
+    def adicionar_livro(titulo, idioma, QuantPaginas, pais, descricao, capaLivro, idEscritor,status):
         cursor = mysql.connection.cursor()
-        cursor.execute('INSERT INTO livros (titulo, idioma, quantidade_paginas, pais, sinopse, status, genero, escritor_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (
-            titulo, idioma, quantidade_paginas, pais, sinopse, status, genero, escritor_id
+        cursor.execute('INSERT INTO livros (titulo, idioma, QuantPaginas, pais, descricao, capaLivro, idEscritor,status) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (
+            titulo, idioma, QuantPaginas, pais, descricao, capaLivro, idEscritor,status
         ))
         mysql.connection.commit()
         livro_id = cursor.lastrowid

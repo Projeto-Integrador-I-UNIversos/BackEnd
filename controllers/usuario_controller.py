@@ -9,12 +9,11 @@ class UsuarioController:
         email = data['email']
         senha = generate_password_hash(data['senha'])
         tipo = data['tipo']
-        usuario_id = UsuarioModel.criar_usuario(email, senha, tipo)
 
         # Criação de editora ou escritor com base no tipo de usuário
         if tipo == 'editora':
             EditoraModel.criar_editora(
-                usuario_id,
+                idUsuario,
                 data.get('nome_fantasia'),
                 data.get('cnpj'),
                 data.get('telefone'),
@@ -27,7 +26,7 @@ class UsuarioController:
             )
         elif tipo == 'escritor':
             EscritorModel.criar_escritor(
-                usuario_id,
+                idUsuario,
                 data.get('nome'),
                 data.get('idade'),
                 data.get('telefone'),
@@ -38,8 +37,10 @@ class UsuarioController:
                 data.get('twitter'),
                 data.get('nacionalidade')
             )
+            
+            idUsuario = UsuarioModel.criar_usuario(email, senha, tipo)
         
-        return usuario_id
+        return idUsuario
 
     @staticmethod
     def autenticar_usuario(email, senha):
