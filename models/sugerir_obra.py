@@ -1,12 +1,12 @@
-class Proposta:
+class SugerirObra:
     def __init__(self, mysql):
         self.mysql = mysql
 
-    def criar_proposta(self, dados):
+    def criar_sugestao(self, dados):
         with self.mysql.connection.cursor() as cursor:
             cursor.execute(
-                'INSERT INTO tb_proposta (data, idEditora, idObra) VALUES (%s, %s, %s)',
-                (dados['data'], dados['idEditora'], dados['idObra'])
+                'INSERT INTO tb_sugerirobra (idEditora, idLivro, data) VALUES (%s, %s, %s)',
+                (dados['idEditora'], dados['idLivro'], dados['data'])
             )
             self.mysql.connection.commit()
         return cursor.lastrowid

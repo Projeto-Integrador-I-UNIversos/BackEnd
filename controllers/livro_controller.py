@@ -1,27 +1,17 @@
-from models.livro import LivroModel
-from models.proposta import PropostaModel
+from models.livro import Livro
 
 class LivroController:
-    @staticmethod
-    def adicionar_livro(data):
-        livro_id = LivroModel.adicionar_livro(
-            data['titulo'],
-            data['idioma'],
-            data['quantidade_paginas'],
-            data['pais'],
-            data['sinopse'],
-            data['status'],
-            data['genero'],
-            data['escritor_id']
-        )
-        return livro_id
+    def __init__(self, mysql):
+        self.model = Livro(mysql)
 
-    @staticmethod
-    def enviar_proposta(data):
-        proposta_id = PropostaModel.enviar_proposta(
-            data['livro_id'],
-            data['usuario_origem'],
-            data['usuario_destino'],
-            data['mensagem']
-        )
-        return proposta_id
+    def adicionar_livro(self, dados):
+        return self.model.criar_livro(dados)
+
+    def buscar_livros_por_escritor(self, idEscritor):
+        return self.model.buscar_livros_por_escritor(idEscritor)
+
+    def editar_livro(self, idLivro, dados):
+        return self.model.atualizar_livro(idLivro, dados)
+
+    def deletar_livro(self, idLivro):
+        return self.model.deletar_livro(idLivro)
