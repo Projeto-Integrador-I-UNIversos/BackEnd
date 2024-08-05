@@ -11,10 +11,15 @@ class Livro:
             self.mysql.connection.commit()
         return cursor.lastrowid
 
-    def buscar_livros_por_escritor(self, idEscritor):
+    def buscar_livro_por_escritor(self, idEscritor):
         with self.mysql.connection.cursor(dictionary=True) as cursor:
             cursor.execute('SELECT * FROM tb_livro WHERE idEscritor = %s', (idEscritor,))
             return cursor.fetchall()
+
+    def buscar_livro_por_id(self, idLivro):
+        with self.mysql.connection.cursor(dictionary=True) as cursor:
+            cursor.execute('SELECT * FROM tb_livro WHERE idLivro = %s', (idLivro,))
+            return cursor.fetchone()
 
     def atualizar_livro(self, idLivro, dados):
         with self.mysql.connection.cursor() as cursor:

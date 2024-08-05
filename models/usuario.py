@@ -1,36 +1,29 @@
-from flask_mysql_connector import MySQL
-from . import mysql
+import hashlib
 
 class UsuarioModel:
+    def __init__(self, mysql):
+        self.mysql = mysql
+
     @staticmethod
-    def criar_usuario(email, senha, tipo):
-        # Use o contexto with para garantir que o cursor seja fechado adequadamente
-        with mysql.connection.cursor() as cursor:
+    def hash_senha(senha):
+        return hashlib.sha256(senha.encode()).hexdigest()
+
+    def criar_usuario(self, email, senha, tipo):
+        hashed_senha = self.hash_senha(senha)
+        with self.mysql.connection.cursor() as cursor:
             cursor.execute(
                 'INSERT INTO tb_usuario (email, senha, tipo) VALUES (%s, %s, %s)',
-                (email, senha, tipo)
+                (email, hashed_senha, tipo)
             )
-            mysql.connection.commit()
-            idUsuario = cursor.lastrowid
-        return idUsuario
+            self.mysql.connection.commit()
+        return cursor.lastrowid
 
-    @staticmethod
-    def buscar_usuario_por_email(email):
-        with mysql.connection.cursor(dictionary=True) as cursor:
-            cursor.execute(
-                'SELECT * FROM tb_usuario WHERE email = %s',
-                (email,)
-            )
-            usuario = cursor.fetchone()
-        return usuario
+    def buscar_usuario_por_email(self, email):
+        with self.mysql.connection.cursor(dictionary=True) as cursor:
+            cursor.execute('SELECT * FROM tb_usuario WHERE email = %s', (email,))
+            return cursor.fetchone()
 
-    @staticmethod
-    def buscar_usuario_por_id(idUsuario):
-        with mysql.connection.cursor(dictionary=True) as cursor:
-            cursor.execute(
-                'SELECT * FROM tb_usuario WHERE id = %s',
-                (idUsuario,)
-            )
-            usuario = cursor.fetchone()
-        return usuario
-    
+    def buscar_usuario_por_id(self, idUsuario):
+        with self.mysql.connection.cursor(dictionary=True) as cursor:
+            cursor.execute('SELECT * FROM tb_usuario WHERE idUsuario = %s', (idUsuario,))
+            return cursor.fetchone()

@@ -10,3 +10,8 @@ class Proposta:
             )
             self.mysql.connection.commit()
         return cursor.lastrowid
+
+    def buscar_proposta_por_id(self, idProposta):
+        with self.mysql.connection.cursor(dictionary=True) as cursor:
+            cursor.execute('SELECT * FROM tb_proposta WHERE idProposta = %s', (idProposta,))
+            return cursor.fetchone()

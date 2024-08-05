@@ -37,33 +37,3 @@ def criar_tabelas():
 
     # Fechar o cursor
     cursor.close()
-"""
-def deletar_usuario(idUsuario):
-    try:
-        # Criar um cursor
-        cursor = conn.cursor()
-
-        # Definir a consulta SQL para deletar o usuário
-        delete_query = "DELETE FROM tb_Usuario WHERE idUsuario = %s"
-
-        # Executar a consulta
-        cursor.execute(delete_query, (idUsuario,))
-
-        # Confirmar a transação
-        conn.commit()
-
-        print(f"Usuário com ID {idUsuario} deletado com sucesso.")
-        
-    except mysql.connector.Error as err:
-        print(f"Erro ao deletar usuário: {err}")
-
-    finally:
-        # Fechar o cursor
-        cursor.close()
-
-# Criar as tabelas se não existirem
-criar_tabelas()
-
-# Exemplo de uso da função de deletar
-deletar_usuario(1)
-"""

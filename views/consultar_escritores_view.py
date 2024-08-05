@@ -1,12 +1,11 @@
-from flask import Blueprint, request, jsonify
-from controllers.consultar_escritores_controller import ConsultarEscritoresController
-from config import mysql
+from flask import Blueprint, jsonify
+from models.escritor import Escritor
+from models import mysql
 
 consultar_escritores_bp = Blueprint('consultar_escritores', __name__)
-consultar_escritores_controller = ConsultarEscritoresController(mysql)
+escritor_model = Escritor(mysql)
 
-@consultar_escritores_bp.route('/consultar', methods=['GET'])
+@consultar_escritores_bp.route('/consultar-escritores', methods=['GET'])
 def consultar_escritores():
-    criterios = request.args.to_dict()
-    escritores = consultar_escritores_controller.buscar_escritores(criterios)
-    return jsonify({'status': 'success', 'escritores': escritores})
+    escritores = escritor_model.buscar_escritores()
+    return jsonify(escritores), 200
