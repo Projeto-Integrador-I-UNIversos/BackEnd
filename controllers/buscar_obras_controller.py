@@ -14,14 +14,20 @@ class BuscarObrasController:
                 params.append(criterios['tipo'])
 
             if 'genero' in criterios:
-                query += ' AND EXISTS (SELECT 1 FROM tb_generolivro gl JOIN tb_genero g ON gl.idGenero = g.idGenero WHERE gl.idLivro = tb_livro.idLivro AND g.nomeGenero = %s)'
+                query += '''
+                AND EXISTS (
+                    SELECT 1 FROM tb_generolivro gl 
+                    JOIN tb_genero g ON gl.idGenero = g.idGenero 
+                    WHERE gl.idLivro = tb_livro.idLivro 
+                    AND g.nomeGenero = %s
+                )
+                '''
                 params.append(criterios['genero'])
 
             if 'palavras_chave' in criterios:
                 query += ' AND (titulo LIKE %s OR descricao LIKE %s)'
                 keyword = f"%{criterios['palavras_chave']}%"
-                params.append(keyword)
-                params.append(keyword)
+                params.extend([keyword, keyword])
 
             cursor.execute(query, params)
             return cursor.fetchall()

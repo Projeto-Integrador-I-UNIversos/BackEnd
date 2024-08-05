@@ -1,18 +1,17 @@
 from flask import Blueprint, request, jsonify
-from controllers.proposta_controller import PropostaController
-from config import mysql
+from models.proposta import Proposta
+from models import mysql
 
 proposta_bp = Blueprint('proposta', __name__)
-proposta_controller = PropostaController(mysql)
+proposta_model = Proposta(mysql)
 
-@proposta_bp.route('/enviar', methods=['POST'])
-def enviar_proposta():
-    data = request.json
-    required_fields = ['data', 'idEditora', 'idObra']
-    
-    for field in required_fields:
-        if not data.get(field):
-            return jsonify({'status': 'error', f'message': 'Campo obrigatório {field} está faltando'}), 400
+@proposta_bp.route('/propostas', methods=['POST'])
+def criar_proposta():
+    dados = request.json
+    idProposta = proposta_model.criar_proposta(dados)
+    return jsonify({"idProposta": idProposta}), 201
 
-    id_proposta = proposta_controller.enviar_proposta(data)
-    return jsonify({'status': 'success', 'message': 'Proposta enviada com sucesso', 'idProposta': id_proposta})
+@proposta_bp.route('/propostas/<int:idProposta>', methods=['GET'])
+def buscar_proposta(idProposta):
+    proposta = proposta_model.buscar_proposta_por_id(idProposta)
+    return jsonify(proposta), 200

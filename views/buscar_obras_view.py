@@ -1,12 +1,11 @@
-from flask import Blueprint, request, jsonify
-from controllers.buscar_obras_controller import BuscarObrasController
-from config import mysql
+from flask import Blueprint, jsonify
+from models.livro import Livro
+from models import mysql
 
 buscar_obras_bp = Blueprint('buscar_obras', __name__)
-buscar_obras_controller = BuscarObrasController(mysql)
+livro_model = Livro(mysql)
 
-@buscar_obras_bp.route('/buscar', methods=['GET'])
-def buscar_obras():
-    criterios = request.args.to_dict()
-    obras = buscar_obras_controller.buscar_obras(criterios)
-    return jsonify({'status': 'success', 'obras': obras})
+@buscar_obras_bp.route('/buscar-obras/<int:idEscritor>', methods=['GET'])
+def buscar_obras_por_escritor(idEscritor):
+    obras = livro_model.buscar_livro_por_escritor(idEscritor)
+    return jsonify(obras), 200
