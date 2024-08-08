@@ -15,3 +15,9 @@ class LivroController:
 
     def deletar_livro(self, idLivro):
         return self.model.deletar_livro(idLivro)
+
+    def listar_todos_livros(self):
+        with self.mysql.connection.cursor() as cursor:
+            cursor.execute('SELECT * FROM tb_livro')
+            livros = cursor.fetchall()
+        return livros

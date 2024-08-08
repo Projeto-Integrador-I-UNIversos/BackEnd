@@ -35,3 +35,9 @@ class Livro:
             cursor.execute('DELETE FROM tb_livro WHERE idLivro = %s', (idLivro,))
             self.mysql.connection.commit()
         return cursor.rowcount > 0
+
+    def listar_todos_livros(self):
+        with self.mysql.connection.cursor() as cursor:
+            cursor.execute('SELECT * FROM tb_livro')
+            livros = cursor.fetchall()
+        return livros

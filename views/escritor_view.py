@@ -5,7 +5,7 @@ from models import mysql
 escritor_bp = Blueprint('escritor', __name__)
 escritor_model = Escritor(mysql)
 
-@escritor_bp.route('/escritores', methods=['POST'])
+@escritor_bp.route('/cadastro', methods=['POST'])
 def criar_escritor():
     dados = request.json
     idEscritor = escritor_model.criar_escritor(dados)
