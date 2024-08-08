@@ -10,23 +10,30 @@ class Editora:
             )
             self.mysql.connection.commit()
         return cursor.lastrowid
-
-    def buscar_editora_por_usuario(self, idUsuario):
+    
+    def buscar_editora_por_id(self, idUsuario):
         with self.mysql.connection.cursor(dictionary=True) as cursor:
-            cursor.execute('SELECT * FROM tb_editora WHERE idUsuario = %s', (idUsuario,))
+            cursor.execute(
+                'SELECT * FROM tb_editora WHERE idUsuario = %s',
+                (idUsuario,)
+            )
             return cursor.fetchone()
 
-    def atualizar_editora(self, idEditora, dados):
+    def deletar_editora(self, idUsuario):
         with self.mysql.connection.cursor() as cursor:
             cursor.execute(
-                'UPDATE tb_editora SET nome = %s, cnpj = %s, telefone = %s, linkedin = %s, siteInstitucional = %s, twitter = %s, instagram = %s, pais = %s, descricao = %s WHERE idEditora = %s',
-                (dados['nome'], dados['cnpj'], dados['telefone'], dados['linkedin'], dados['siteInstitucional'], dados['twitter'], dados['instagram'], dados['pais'], dados['descricao'], idEditora)
+                'DELETE FROM tb_editora WHERE idUsuario = %s',
+                (idUsuario,)
             )
             self.mysql.connection.commit()
-        return cursor.rowcount > 0
 
-    def deletar_editora(self, idEditora):
+    def atualizar_editora(self, idUsuario, dados):
+        set_clause = ', '.join([f"{key} = %s" for key in dados.keys()])
+        values = list(dados.values())
+        values.append(idUsuario)
+        query = f'UPDATE tb_editora SET {set_clause} WHERE idUsuario = %s'
+        
         with self.mysql.connection.cursor() as cursor:
-            cursor.execute('DELETE FROM tb_editora WHERE idEditora = %s', (idEditora,))
+            cursor.execute(query, values)
             self.mysql.connection.commit()
-        return cursor.rowcount > 0
+            return cursor.rowcount > 0

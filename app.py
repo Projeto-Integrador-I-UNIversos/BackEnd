@@ -12,7 +12,7 @@ from views.sugerir_obra_view import sugerir_obra_bp
 
 app = Flask(__name__)
 
-# Configuração do CORS, premissão de origem
+# Configuração do CORS
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 # Inicializa o banco de dados
@@ -27,6 +27,13 @@ app.register_blueprint(buscar_obras_bp)
 app.register_blueprint(consultar_escritores_bp)
 app.register_blueprint(proposta_bp)
 app.register_blueprint(sugerir_obra_bp)
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True)
