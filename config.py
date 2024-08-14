@@ -3,8 +3,8 @@ import mysql.connector
 # Conectar ao banco de dados MySQL
 conn = mysql.connector.connect(
     host="127.0.0.1",
-    user="admin",
-    password="admin",
+    user="lara",
+    password="LaraVictoria123_@;",
     database="universos_literarios"
 )
 
