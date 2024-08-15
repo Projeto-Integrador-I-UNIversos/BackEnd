@@ -11,6 +11,8 @@ from views.proposta_view import proposta_bp
 from views.sugerir_obra_view import sugerir_obra_bp
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = '/home/lara/Documentos/arquivoTeste'
+app.register_blueprint(livro_bp)
 
 # Configuração do CORS
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})

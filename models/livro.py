@@ -22,13 +22,18 @@ class Livro:
             return cursor.fetchone()
 
     def atualizar_livro(self, idLivro, dados):
-        with self.mysql.connection.cursor() as cursor:
-            cursor.execute(
-                'UPDATE tb_livro SET titulo = %s, idioma = %s, QuantPaginas = %s, pais = %s, descricao = %s, capaLivro = %s, status = %s, PdfLivro = %s WHERE idLivro = %s',
-                (dados['titulo'], dados['idioma'], dados['QuantPaginas'], dados['pais'], dados['descricao'], dados['capaLivro'], dados['status'], dados['PdfLivro'], idLivro)
-            )
-            self.mysql.connection.commit()
-        return cursor.rowcount > 0
+        try:
+            with self.mysql.connection.cursor() as cursor:
+                cursor.execute(
+                    'UPDATE tb_livro SET titulo = %s, idioma = %s, QuantPaginas = %s, pais = %s, descricao = %s, capaLivro = %s, status = %s, PdfLivro = %s WHERE idLivro = %s',
+                    (dados['titulo'], dados['idioma'], dados['QuantPaginas'], dados['pais'], dados['descricao'], dados['capaLivro'], dados['status'], dados['PdfLivro'], idLivro)
+                )
+                self.mysql.connection.commit()
+                print(f"Linhas afetadas: {cursor.rowcount}")  # Log para ver quantas linhas foram afetadas
+            return cursor.rowcount > 0
+        except mysql.connector.Error as err:
+            print(f"Erro ao atualizar livro: {err}")
+            return False
 
     def deletar_livro(self, idLivro):
         with self.mysql.connection.cursor() as cursor:
@@ -37,7 +42,7 @@ class Livro:
         return cursor.rowcount > 0
 
     def listar_todos_livros(self):
-        with self.mysql.connection.cursor() as cursor:
+        with self.mysql.connection.cursor(dictionary=True) as cursor:
             cursor.execute('SELECT * FROM tb_livro')
             livros = cursor.fetchall()
         return livros
