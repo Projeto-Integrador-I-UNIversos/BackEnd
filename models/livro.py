@@ -38,6 +38,7 @@ class Livro:
     def deletar_livro(self, idLivro):
         with self.mysql.connection.cursor() as cursor:
             cursor.execute('DELETE FROM tb_livro WHERE idLivro = %s', (idLivro,))
+            print(f'idLivro', idLivro)
             self.mysql.connection.commit()
         return cursor.rowcount > 0
 

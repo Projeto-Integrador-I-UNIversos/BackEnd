@@ -25,6 +25,8 @@ def criar_livro():
         capa_path = os.path.join(upload_folder, nome_capa_livro)
         capa_livro.save(capa_path)
         dados['capaLivro'] = nome_capa_livro
+        print("Nome da capa do livro salvo:", nome_capa_livro)
+
 
     print("Dados após processamento:", dados)  # Log dos dados finais
 
@@ -84,6 +86,7 @@ def deletar_livro(idLivro):
         if sucesso:
             return jsonify({'message': 'Livro deletado com sucesso!'}), 200
         else:
-            return jsonify({'error': 'Erro ao deletar o livro, nenhum registro afetado'}), 404
+            return jsonify({'error': f'Erro ao deletar o livro, nenhum registro afetado', 'codigo_erro': e.args[0]}), 404
     except Exception as e:
-        return jsonify({'error': f'Erro ao deletar o livro: {str(e)}'}), 500
+        #return jsonify({'error': f'Erro ao deletar o livro: {str(e)}'}), 500
+        return jsonify({'error': f'Erro ao deletar o livro: {str(e)}', 'codigo_erro': e.args[0]}), 500
