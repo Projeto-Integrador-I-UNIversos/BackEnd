@@ -1,5 +1,4 @@
-import datetime
-
+from datetime import datetime
 
 class Escritor:
 
@@ -38,16 +37,15 @@ class Escritor:
             cursor.execute(query, values)
             self.mysql.connection.commit()
             return cursor.rowcount > 0
-        
-        
+
     def converter_data_para_iso(self, data_ddmmaa):
         try:
             # Converte data de 'DD/MM/YYYY' para 'YYYY-MM-DD'
-            data_datetime = datetime.strptime(data_ddmmaa, '%d/%m/%Y')
+            data_datetime = datetime.strptime(data_ddmavaa, '%d/%m/%Y')
             return data_datetime.strftime('%Y-%m-%d')
         except ValueError:
             raise ValueError("Data inválida. O formato deve ser dd/mm/aaaa.")
-  
+
     def listar_todos_escritores(self):
         try:
             with self.mysql.connection.cursor(dictionary=True) as cursor:

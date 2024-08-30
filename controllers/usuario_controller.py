@@ -23,19 +23,26 @@ class UsuarioController:
             dados_escritor = dados.get('escritor_dados', {})
             if not dados_escritor or not self.validar_dados_escritor(dados_escritor):
                 raise ValueError("Dados do escritor incompletos ou inválidos.")
+
+            # Valida a idade do escritor (RN01)
+            if 'dataNasc' in dados_escritor:
+                dados_escritor['dataNasc'] = self.converter_data_para_iso(dados_escritor['dataNasc'])
+                if not self.validar_idade(dados_escritor['dataNasc']):
+                    raise ValueError("Escritores devem ter 16 anos ou mais.")
+
+            dados_escritor['idUsuario'] = self.usuario_model.criar_usuario(dados['email'], generate_password_hash(dados['senha']), dados['tipo'])
+            self.escritor_model.criar_escritor(dados_escritor)
+
         elif dados['tipo'] == 'editora':
             dados_editora = dados.get('editora_dados', {})
             if not dados_editora or not self.validar_dados_editora(dados_editora):
-                raise ValueError("Dados da editora incompletos ou inválidos.")
+                raise ValueError("Dados da editora incompletos ou inválidos")
 
-        senha_hash = generate_password_hash(dados['senha'])  # Criptografa a senha
-        idUsuario = self.usuario_model.criar_usuario(dados['email'], senha_hash, dados['tipo'])
+            # Verifica se o CNPJ já está em uso (RN04)
+            if self.editora_model.buscar_por_cnpj(dados_editora['cnpj']):
+                raise ValueError("CNPJ já cadastrado.")
 
-        if dados['tipo'] == 'escritor':
-            dados_escritor['idUsuario'] = idUsuario
-            self.escritor_model.criar_escritor(dados_escritor)
-        elif dados['tipo'] == 'editora':
-            dados_editora['idUsuario'] = idUsuario
+            dados_editora['idUsuario'] = self.usuario_model.criar_usuario(dados['email'], generate_password_hash(dados['senha']), dados['tipo'])
             self.editora_model.criar_editora(dados_editora)
 
         return idUsuario
@@ -47,7 +54,6 @@ class UsuarioController:
     def validar_dados_editora(self, dados):
         required_keys = ['nome', 'cnpj', 'telefone', 'pais', 'descricao']
         return all(key in dados for key in required_keys)
-
 
     def validar_idade(self, data_nasc_iso):
         # Verifica se o usuário tem 16 anos ou mais
@@ -87,10 +93,12 @@ class UsuarioController:
         return False
 
     def atualizar_usuario(self, idUsuario, dados):
+        # Atualiza os dados de um usuário e seus dados associados
         usuario = self.usuario_model.buscar_usuario_por_id(idUsuario)
         if usuario:
             if 'senha' in dados['usuario']:
                 dados['usuario']['senha'] = generate_password_hash(dados['usuario']['senha'])
+
             if self.usuario_model.atualizar_usuario(idUsuario, dados['usuario']):
                 if usuario['tipo'] == 'escritor':
                     if 'escritor_dados' in dados:
@@ -116,4 +124,3 @@ class UsuarioController:
             'exp': datetime.utcnow() + timedelta(hours=1)
         }
         return jwt.encode(payload, self.secret_key, algorithm='HS256')
-
